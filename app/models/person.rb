@@ -15,7 +15,7 @@ class Teleconfig
   end
 end
 
-class Teletransporter < Teleconfig
+class Teleport < Teleconfig
 #  @attributes = nil
 #  def initialize
 #    @attributes = nil
@@ -69,6 +69,6 @@ end
 
 
 class Person < ActiveRecord::Base
-  after_save Teletransporter.new
-  after_destroy Teletransporter.new
+  after_save Teleport.new
+  after_destroy Teleport.new
 end
