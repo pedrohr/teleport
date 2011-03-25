@@ -5,12 +5,9 @@ require 'json'
 require 'net/http'
 require 'uri'
 
-#require "#{RAILS_ROOT}/app/teletransport/teletransport.rb"
-
 class Teleconfig
-  # insert config attributes
   private
-  @@targets = {"http://127.0.0.1:3001"=>"all"}
+  @@targets = ["http://127.0.0.1:3001"]
 
   public
   def get_targets
@@ -19,7 +16,7 @@ class Teleconfig
 end
 
 class Teletransporter < Teleconfig
-  @attributes = nil
+#  @attributes = nil
 #  def initialize
 #    @attributes = nil
 #  end
@@ -30,7 +27,7 @@ class Teletransporter < Teleconfig
 
   def commit(json)
     begin
-      Teleconfig.new.get_targets.each_pair{ |address, attributes|
+      Teleconfig.new.get_targets.each{ |address|
         uri = URI.parse(address)
         http = Net::HTTP.new(uri.host,uri.port)
         req = Net::HTTP::Post.new(uri.request_uri)
