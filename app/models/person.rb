@@ -39,7 +39,7 @@ class Teleport < Teleconfig
       Teleconfig.new.get_targets.each{ |address|
         uri = URI.parse(address)
         http = Net::HTTP.new(uri.host,uri.port)
-        req = Net::HTTP::Post.new(uri.request_uri)
+        req = Net::HTTP::Put.new(uri.request_uri)
         req.body = json
         req["Content-Type"] = "application/json"
         response = http.request(req)
@@ -60,19 +60,13 @@ class Teleport < Teleconfig
     end
   end
 
-  def create_json(record, type)
-    fields = record.attributes
-    fields["@type"] = type
-    fields.to_json
-  end
-
   def after_save(record)
-    json = create_json(record,"save")
+    json = record.to_json
     commit(json)
   end
 
   def after_destroy(record)
-    json = create_json(record,"destroy")
+    json = record.to_json
     commit(json)
   end
 end
