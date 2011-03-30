@@ -1,5 +1,5 @@
 This is a rails app created to test and develop the new gemfile from Teleport.
 
-All the tests are being runned with the "person.rb" model. Another rails app was created in other to received all the HTTP posts but it's not here on this repository. Still have not found no need to commit that here.
+All the tests are being runned on the "person.rb" model. Another rails app was created in order to received all the HTTP posts but it's not here on this repository. Still have not found no need to commit that here.
 
 The gem's prototype is located in the /app/model/person.rb file in the 'Teletransporter' class.
