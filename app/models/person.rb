@@ -25,6 +25,15 @@ class Teleport < Teleconfig
 #    @attributes = attributes
 #  end
 
+  class Logger
+    def self.log_send(json, address)
+      puts "\n\n"
+      puts "Teleporting data to #{address}"
+      puts "   #{json.to_s}"
+      puts "Completed.\n"
+    end
+  end
+
   def commit(json)
     begin
       Teleconfig.new.get_targets.each{ |address|
@@ -34,8 +43,9 @@ class Teleport < Teleconfig
         req.body = json
         req["Content-Type"] = "application/json"
         response = http.request(req)
-        puts "Response #{response.code} #{response.message}:
-          #{response.body}"
+#        puts "Response #{response.code} #{response.message}:
+#          #{response.body}"
+        Logger.log_send(json, address)
       }
     rescue Errno::ECONNREFUSED => e
       puts "============================================="
