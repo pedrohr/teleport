@@ -25,6 +25,10 @@ class Teleport < Teleconfig
 #    @attributes = attributes
 #  end
 
+  POST = Net::HTTP::Post
+  DELETE = Net::HTTP::Delete
+  PUT = Net::HTTP::Put
+
   class Logger
     def self.log_send(json, address)
       puts "\n\n"
@@ -34,17 +38,15 @@ class Teleport < Teleconfig
     end
   end
 
-  def commit(json)
+  def commit(json, method)
     begin
       Teleconfig.new.get_targets.each{ |address|
         uri = URI.parse(address)
         http = Net::HTTP.new(uri.host,uri.port)
-        req = Net::HTTP::Put.new(uri.request_uri)
+        req = method.new(uri.request_uri)
         req.body = json
         req["Content-Type"] = "application/json"
         response = http.request(req)
-#        puts "Response #{response.code} #{response.message}:
-#          #{response.body}"
         Logger.log_send(json, address)
       }
     rescue Errno::ECONNREFUSED => e
@@ -60,19 +62,20 @@ class Teleport < Teleconfig
     end
   end
 
-  def after_save(record)
+  #ISSUE: dont need to send the whole JSON. Just the key.
+
+  def after_create(record)
     json = record.to_json
-    commit(json)
+    commit(json, POST)
   end
 
   def after_destroy(record)
     json = record.to_json
-    commit(json)
+    commit(json, DELETE)
   end
 end
 
-
 class Person < ActiveRecord::Base
-  after_save Teleport.new
+  after_create Teleport.new
   after_destroy Teleport.new
 end
