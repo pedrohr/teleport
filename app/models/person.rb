@@ -16,14 +16,9 @@ class Teleconfig
 end
 
 class Teleport < Teleconfig
-#  @attributes = nil
-#  def initialize
-#    @attributes = nil
-#  end
-
-#  def initialize(attributes)
-#    @attributes = attributes
-#  end
+  def initialize(function)
+    function
+  end
 
   POST = Net::HTTP::Post
   DELETE = Net::HTTP::Delete
@@ -51,7 +46,7 @@ class Teleport < Teleconfig
       }
     rescue Errno::ECONNREFUSED => e
       puts "============================================="
-      puts "Server not online."
+      puts "Central server is not online."
       puts e.message
       puts "============================================="
     rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
@@ -76,6 +71,12 @@ class Teleport < Teleconfig
 end
 
 class Person < ActiveRecord::Base
-  after_create Teleport.new
-  after_destroy Teleport.new
+  def self.my_after_create
+  end
+
+  def self.my_after_destroy
+  end
+
+  after_create Teleport.new(my_after_create)
+  after_destroy Teleport.new(my_after_destroy)
 end
