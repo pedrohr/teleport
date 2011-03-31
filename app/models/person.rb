@@ -68,6 +68,26 @@ class Teleport < Teleconfig
     json = record.to_json
     commit(json, DELETE)
   end
+
+  def after_save(record)
+    json = record.to_json
+    commit(json, PUT)
+  end
+
+  def before_create(record)
+    json = record.to_json
+    commit(json, POST)
+  end
+
+  def before_destroy(record)
+    json = record.to_json
+    commit(json, DELETE)
+  end
+
+  def before_save(record)
+    json = record.to_json
+    commit(json, PUT)
+  end
 end
 
 class Person < ActiveRecord::Base
@@ -79,4 +99,5 @@ class Person < ActiveRecord::Base
 
   after_create Teleport.new(my_after_create)
   after_destroy Teleport.new(my_after_destroy)
+  after_save Teleport.new(nil)
 end
