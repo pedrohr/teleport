@@ -92,8 +92,9 @@ class Teleport < Teleconfig
     record.changes.each { |attr,values|
       old_record[attr] = values.first
     }
+
     #generating the new key
-    key = old_record.serializable_hash.to_s.crypt("id") 
+    key = old_record.serializable_hash.to_s.crypt("id")
 
     # decision:
     # => a composed key: (__key + created_at) is not being
