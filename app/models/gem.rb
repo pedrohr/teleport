@@ -1,4 +1,3 @@
-require 'pp'
 require 'json'
 require 'net/http'
 require 'uri'
@@ -73,7 +72,7 @@ class Teleport < Teleconfig
       old_record[attr] = values.first
     }
 
-    #generating the new keys
+    #generating new keys
     key = gen_key(old_record.serializable_hash)
     new_key = gen_key(record.serializable_hash)
 
