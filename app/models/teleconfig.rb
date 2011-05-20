@@ -8,6 +8,8 @@ class Teleconfig
   end
 end
 
+# Plz... look at this! 
+# TODO: a 'real' completed
 class Logger
   def self.log_send(json, address)
     puts "\n\n"
