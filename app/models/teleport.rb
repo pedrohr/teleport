@@ -3,7 +3,28 @@ require 'net/http'
 require 'uri'
 require 'digest/sha2'
 
-require 'teleconfig'
+#TODO: take it outta here into a yaml config file
+class Teleconfig
+  private
+  @@targets = ["http://127.0.0.1:3000"]
+
+  public
+  def get_targets
+    return @@targets
+  end
+end
+
+# Plz... look at this! 
+# TODO: a 'real' completed
+class Logger
+  def self.log_send(json, address)
+    puts "\n\n"
+    puts "Teleporting data to #{address}"
+    puts "   #{json.to_s}"
+    puts "Completed.\n"
+  end
+end
+
 
 class Teleport < Teleconfig
   def initialize(function)
