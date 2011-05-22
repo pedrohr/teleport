@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-require 'gem.rb'
+require 'teleport.rb'
 
 class Person < ActiveRecord::Base
   #this methods must be static to the model
