@@ -9,7 +9,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: Teletransport_development
+  database: Sat1_development
   pool: 5
   username: root
   password: mysql123
@@ -22,7 +22,7 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: Teletransport_test
+  database: Sat1_test
   pool: 5
   username: root
   password:
@@ -32,7 +32,7 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: Teletransport_production
+  database: Sat1_production
   pool: 5
   username: root
   password:
