@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 require 'teleport.rb'
 
 class Person < ActiveRecord::Base
-  #this methods must be static to the model
+  #this methods must be static in the model class
   def self.my_after_create
   end
 

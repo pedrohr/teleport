@@ -3,19 +3,6 @@ require 'net/http'
 require 'uri'
 require 'digest/sha2'
 
-#TODO: take it outta here into a yaml config file
-class Teleconfig
-  private
-  @@targets = ["http://127.0.0.1:3000"]
-
-  public
-  def get_targets
-    return @@targets
-  end
-end
-
-# Plz... look at this! 
-# TODO: a 'real' completed
 class Logger
   def self.log_send(json, address)
     puts "\n\n"
@@ -23,12 +10,27 @@ class Logger
     puts "   #{json.to_s}"
     puts "Completed.\n"
   end
+
+  def self.server_not_online(e)
+    puts "========"
+    puts "Central server is not online."
+    puts e.message
+    puts "========"
+  end
+
+  def self.connection_fail(e)
+    puts "========"
+    puts "Fail sending info to the central server"
+    puts e.message
+    puts "========"
+  end
 end
 
-
-class Teleport < Teleconfig
-  def initialize(function)
-    function
+class Teleport
+  @@config = YAML::load(File.open(Rails.root.to_s + '/config/teleport.yml')) 
+  
+  def initialize(method)
+    method
   end
 
   POST = Net::HTTP::Post
@@ -37,7 +39,7 @@ class Teleport < Teleconfig
 
   def commit(json, method)
     begin
-      Teleconfig.new.get_targets.each{ |address|
+      @@config["targets"].each{ |address|
         uri = URI.parse(address)
         http = Net::HTTP.new(uri.host,uri.port)
         req = method.new(uri.request_uri)
@@ -47,15 +49,9 @@ class Teleport < Teleconfig
         Logger.log_send(json, address)
       }
     rescue Errno::ECONNREFUSED => e
-      puts "============================================="
-      puts "Central server is not online."
-      puts e.message
-      puts "============================================="
+      Logger.server_not_online(e)
     rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
-      puts "============================================="
-      puts "Fail!"
-      puts e.message
-      puts "============================================="
+      Logger.connection_fail(e)
     end
   end
 
